@@ -1,0 +1,88 @@
+.featured-collection-main-title {
+    padding-top: 100px;
+    text-align: center;
+}
+
+.featured-collection-main-title b {
+    color: #0d6efd;
+}
+
+.fc-list {
+    display: flex;
+    color: white;
+    width: 100%;
+    flex-wrap: nowrap;
+}
+
+.fc-list-p {
+    padding: 10px;
+    width: 25%;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    /* background-color: blue; */
+    align-items: center;
+    margin-left: 5px;
+}
+
+.fc-list-p1 {
+    /* background-image: url('../Images/gaming.jpg'); */
+    background: linear-gradient(0deg, rgba(58, 58, 58, 0.3), rgba(0, 0, 0, 0.3)), url('../Images/gaming.jpg');
+    background-position: center;
+    /* Center the image */
+    background-repeat: no-repeat;
+    /* Do not repeat the image */
+    background-size: cover;
+    /* Resize the background image to cover the entire container  */
+}
+
+.fc-list-p2 {
+    background: linear-gradient(0deg, rgba(58, 58, 58, 0.3), rgba(0, 0, 0, 0.3)), url('../Images/arts.jpg');
+    /* background-image: url(); */
+    background-position: center;
+    /* Center the image */
+    background-repeat: no-repeat;
+    /* Do not repeat the image */
+    background-size: cover;
+    /* Resize the background image to cover the entire container  */
+}
+
+.fc-list-p3 {
+    background: linear-gradient(0deg, rgba(58, 58, 58, 0.3), rgba(0, 0, 0, 0.3)), url('../Images/sports.png');
+    background-position: top;
+    /* Center the image */
+    background-repeat: no-repeat;
+    /* Do not repeat the image */
+    background-size: cover;
+    /* Resize the background image to cover the entire container  */
+}
+
+.fc-list-p4 {
+    background: linear-gradient(0deg, rgba(58, 58, 58, 0.3), rgba(0, 0, 0, 0.3)), url('../Images/photography.jpg');
+    background-position: center;
+    /* Center the image */
+    background-repeat: no-repeat;
+    /* Do not repeat the image */
+    background-size: cover;
+    /* Resize the background image to cover the entire container  */
+}
+
+@media (max-width: 900px) {
+    .fc-list {
+        flex-wrap: wrap;
+    }
+    .fc-list-p {
+        width: 49%;
+        margin-right: 0px;
+        margin-bottom: 5px!important;
+    }
+}
+
+@media (max-width: 600px) {
+    .fc-list-p {
+        width: 100%;
+        margin-left: 5px!important;
+        margin-bottom: 5px!important;
+        /* margin-left: 5px; */
+    }
+}

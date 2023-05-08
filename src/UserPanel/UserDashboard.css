@@ -1,0 +1,27 @@
+.user-dashboard-page {
+    display: grid;
+    padding: 20px;
+    grid-template-columns: 1fr 4fr;
+}
+
+.user-main {
+    padding: 20px;
+}
+
+@media (max-width: 1000px) {
+    .user-dashboard-page {
+        grid-template-columns: 1fr 2fr;
+    }
+}
+
+@media (max-width: 800px) {
+    .user-dashboard-page {
+        grid-template-columns: 1fr;
+        padding: 0px;
+        margin: 0px;
+    }
+    .user-main {
+        padding: 0px;
+        margin: 0px;
+    }
+}

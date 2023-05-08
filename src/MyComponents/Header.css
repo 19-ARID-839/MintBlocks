@@ -1,0 +1,12 @@
+.navbar {
+    padding: 10px 50px;
+}
+
+.nav-btn {
+    color: white;
+    padding: 10px
+}
+
+.nav-btn:hover {
+    color: white;
+}

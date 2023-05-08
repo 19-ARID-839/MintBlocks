@@ -1,0 +1,13 @@
+.admin-login-image{
+    width: 400px;
+   
+}
+
+.form-group .form-control{
+    width: 100%;
+}
+
+.admin-right{
+    display: flex;
+    justify-content: center;
+}

@@ -1,0 +1,200 @@
+import React, { useState ,useEffect } from 'react'
+import UserSidebar from './Components/UserSidebar'
+import NFTMarketplace from '../artifacts/contracts/NFTMarketplace.sol/NFTMarketplace.json'
+import nftmarketaddress from '../config'
+import { ethers } from 'ethers'
+import axios from 'axios'
+import Web3Modal from 'web3modal'
+import Modal from 'react-bootstrap/Modal'
+
+
+const Orders = () => {
+
+
+  let wAddressLocalget = JSON.parse(localStorage.getItem('wAddressLocal'));
+  console.log(wAddressLocalget);
+  const [nfts, setNfts] = useState([])
+  const [loadingState, setLoadingState] = useState('not-loaded')
+const [noNftsText, setNoNftText] = useState("All of unsold NFTs are listed below")
+const [noNftsSet, setNoNftsSet] = useState(false)
+const [showModal, setShowModal] = useState(false)
+  
+const handleShowModal = () => setShowModal(true)
+const handleCloseModal = () => setShowModal(false)
+  useEffect(() => {
+    loadNFTs()
+  }, [])
+  function ncard(val) {
+   function formatAddress(address){
+    return `${address.slice(0,3)}...${address.slice(-4)}`
+   }
+  
+    return (
+      <>
+        <tr key={val.tokenId}>
+          <th scope="row">{val.tokenId}</th>
+          <td className="mint-image" width={1}>
+            <img src={val.image} alt="" className="rounded fluid" height={40} onClick={handleShowModal} />
+          </td>
+          <td>{val.name}</td>
+          <td>{val.price} MATIC</td>
+          <td>{formatAddress(val.owner)}</td>
+          <td>{formatAddress(val.seller)}</td>
+          <button type="button" className="btn btn-outline-info me-2 mt-2" onClick={() => buyNft(val)}>
+            Buy
+          </button>
+        </tr>
+        <Modal show={showModal} onHide={handleCloseModal}>
+          <Modal.Body>
+            <img src={val.image} alt="" className="img-fluid" />
+          </Modal.Body>
+        </Modal>
+      </>
+    )
+  }
+async function loadNFTs(){
+  // const provider = new ethers.providers.JsonRpcProvider()
+  //   const contract = new ethers.Contract(nftmarketaddress, NFTMarketplace.abi, provider)
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(nftmarketaddress, NFTMarketplace.abi, signer)
+    const data = await contract.fetchMarketItems()
+
+    //items is an array that stores all the values from the data array, but with additional information added to each item. The additional information is obtained by calling the contract.tokenURI method and making an HTTP GET request to the returned URI. The retrieved metadata, along with the token ID, seller, owner, and price of the NFT, is then used to create an item object for each NFT. Finally, the items array is populated with these item objects.
+
+    const items = await Promise.all(data.map(async i=> {
+      const tokenUri = await contract.tokenURI(i.tokenId)
+      const meta = await axios.get(tokenUri)
+      let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
+
+      let item = {
+        price,
+        tokenId: i.tokenId.toNumber(),
+        seller: i.seller,
+        owner: i.owner,
+        image: meta.data.image,
+        name: meta.data.name,
+        description: meta.data.description,
+      }
+      return item
+    }))
+    setNfts(items)
+    setLoadingState('loaded')
+
+}
+async function buyNft(nft) {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(nftmarketaddress, NFTMarketplace.abi, signer)
+  /* user will be prompted to pay the asking proces to complete the transaction */
+  const price = ethers.utils.parseUnits(nft.price.toString(), 'ether')   
+  const transaction = await contract.createMarketSale(nft.tokenId, {
+    value: price
+  })
+  await transaction.wait()
+  loadNFTs()
+}
+
+if (loadingState === 'loaded' && !nfts.length && !noNftsSet) {
+
+ setNoNftText("No Items in the marketplace")
+ setNoNftsSet(true) // used to handle infinity loop error, when this statemennt works once, it is set to true, no it will not work.
+  
+}
+
+  if (wAddressLocalget !== null) {
+    
+    // loadingText.innerHTML = "No Items"
+  return (
+    <div>
+       <div className="container user-dashboard-page">
+            <div className="user-sidebar">
+                <UserSidebar />
+
+            </div>
+            <div className="user-main container">
+        
+            <h3 className="mt-3">
+              NFTs Available for Sale
+            </h3>
+            {/* <p>All of your unsold NFTs are listed below</p> */}
+            {/* <p id="loading-state">{noNftsText}</p> */}
+            {nfts.length === 0? (
+        <p>No NFTs to display.</p>
+      ) : (
+        <table className="table">
+          <thead>
+            <tr className="table-light">
+              <th scope="col">ID</th>
+              <th scope="col">Image</th>
+              <th scope="col">Title</th>
+              <th scope="col">Price</th>
+              <th scope="col">Owner</th>
+              <th scope="col">Seller</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>{nfts.map(ncard)}</tbody>
+        </table>
+      )}
+           
+          {/* <div className="here simple one flex justify-center">
+      <div className="">
+        <div className="">
+          {
+            nfts.map((nft, i) => (
+              <div key={i} className="">
+                <img src={nft.image} />
+                <div className="p-4">
+                  <p className="">{nft.name}</p>
+                  <div>
+                    <p className="">{nft.description}</p>
+                  </div>
+                </div>
+                <div className="">
+                  <p className="">{nft.price} ETH</p>
+                  <button className="" onClick={() => buyNft(nft)}>Buy</button>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div> */}
+          {/* <nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item disabled">
+      <Link class="page-link" href="#" tabindex="-1">Previous</Link>
+    </li>
+    <li class="page-item active"><Link class="page-link" href="#">1<span class="sr-only">(current)</span></Link></li>
+    <li class="page-item ">
+      <Link class="page-link" href="#">2 </Link>
+    </li>
+    <li class="page-item"><Link class="page-link" href="#">3</Link></li>
+    <li class="page-item">
+      <Link class="page-link" href="#">Next</Link>
+    </li>
+  </ul>
+</nav> */}
+          </div>
+        
+        </div>
+    </div>
+  )
+}
+else{
+  console.log("NO")
+        
+  return(
+    <div className="container">
+<p>You don't have permissions to access this page. Please connect your wallet.</p>
+
+    </div>
+  
+    
+  )
+}
+
+}
+
+export default Orders

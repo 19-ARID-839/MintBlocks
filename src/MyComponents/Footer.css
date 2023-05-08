@@ -1,0 +1,113 @@
+    .full-footer {
+        margin-top: 10vh;
+        background-color: rgb(51, 51, 51);
+        color: white;
+    }
+    
+    .full-footer hr {
+        margin: 0px;
+    }
+    
+    .footer-call-to-action {
+        display: grid;
+        grid-template-columns: repeat(4, auto);
+        padding: 50px;
+        /* background-color: #0d6efd; */
+        background-image: linear-gradient(to right, #5ae8a6 , #0d6efd);
+
+    }
+    
+    .footer-call-to-action-p1 {
+        grid-column: span 3;
+    }
+    
+    .footer-call-to-action-p2 {
+        grid-column: span 1;
+    }
+    
+    .footer-call-to-action-p {
+        padding: 10px;
+    }
+    
+    .above-footer {
+        display: grid;
+        grid-template-columns: repeat(4, auto);
+        padding: 50px;
+    }
+    
+    .above-footer-p {
+        padding: 10px;
+    }
+    
+    .footer-icons {
+        font-size: 20px;
+        margin: 10px;
+    }
+    
+    .footer {
+        /* margin-top: 10vh; */
+        height: 5vh;
+        padding: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .above-footer li a {
+        list-style: none;
+    }
+    .quick-links-footer a{
+        color: white;
+        text-decoration: none;
+        list-style-type: none;
+    }
+    .above-footer ul{
+        padding-left: 0px;
+        list-style-type: none;
+    }
+    .quick-links-footer a:hover{
+        /* color: wheat; */
+        text-decoration: underline;
+    }
+    @media (max-width: 900px) {
+        .above-footer-p1 {
+            grid-column: span 4;
+        }
+        .above-footer-p3 {
+            grid-column: span 2;
+        }
+        .above-footer-p4 {
+            grid-column: span 2;
+        }
+        .above-footer {
+            grid-template-columns: repeat(4, 1fr);
+            /* grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); */
+        }
+        /* .above-footer-p1 {
+            grid-area: part1;
+        }
+        .above-footer-p3 {
+            grid-area: part2;
+        }
+        .above-footer-p4 {
+            grid-area: part3;
+        } */
+    }
+    
+    @media (max-width: 600px) {
+        .above-footer-p1 {
+            grid-column: span 1;
+        }
+        .above-footer-p3 {
+            grid-column: span 1;
+        }
+        .above-footer-p4 {
+            grid-column: span 1;
+        }
+        .above-footer {
+            grid-template-columns: repeat(1, 1fr);
+        }
+        .footer-call-to-action {
+            grid-template-columns: repeat(1, 1fr);
+        }
+    }
