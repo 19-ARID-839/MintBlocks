@@ -8,9 +8,13 @@ import Web3Modal from "web3modal";
 import Modal from "react-bootstrap/Modal";
 const Orders = () => {
   const [nfts, setNfts] = useState([]);
+  const [selectedNft, setSelectedNft] = useState(null);
   const [loadingState, setLoadingState] = useState("not-loaded");
   const [showModal, setShowModal] = useState(false);
-  const handleShowModal = () => setShowModal(true);
+  const handleShowModal = (nft) => {
+    setSelectedNft(nft);
+    setShowModal(true);
+  };
   const handleCloseModal = () => setShowModal(false);
   useEffect(() => {
     loadNFTs();
@@ -24,13 +28,13 @@ const Orders = () => {
         <tr>
         <td>{val.tokenId.slice(-3)} </td>
           <td className="mint-image" width={1}>
-            <img
-              src={val.fileUrl}
-              alt=""
-              className="rounded fluid"
-              height={40}
-              onClick={handleShowModal}
-            />
+          <img
+  src={val.image}
+  alt=""
+  className="rounded fluid"
+  height={40}
+  onClick={() => handleShowModal(val)}
+/>
           </td>
           <td>{val.name}</td>
           <td>{val.price} MATIC</td>
@@ -50,10 +54,12 @@ const Orders = () => {
         </tr>
 
         <Modal show={showModal} onHide={handleCloseModal}>
-          <Modal.Body>
-            <img src={val.image} alt="" className="img-fluid" />
-          </Modal.Body>
-        </Modal>
+  <Modal.Body>
+    {selectedNft && (
+      <img src={selectedNft.image} alt="" className="img-fluid" />
+    )}
+  </Modal.Body>
+</Modal>
       </>
     );
   }

@@ -10,8 +10,13 @@ import Modal from "react-bootstrap/Modal";
 const UserDashboard = () => {
   const [nfts, setNfts] = useState([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
+  const [selectedNft, setSelectedNft] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const handleShowModal = () => setShowModal(true);
+  // const handleShowModal = () => setShowModal(true);
+  const handleShowModal = (nft) => {
+    setSelectedNft(nft);
+    setShowModal(true);
+  };
   const handleCloseModal = () => setShowModal(false);
   useEffect(() => {
     fetchMyList();
@@ -22,10 +27,12 @@ const UserDashboard = () => {
         if (!val || !val.tokenId) {
           return;
         }
-    
+
         await axios.delete(`http://localhost:8000/api/nfts/${val.tokenId}`);
         // remove the deleted NFT from the nfts state
-        setNfts((prevNfts) => prevNfts.filter((nft) => nft.tokenId !== val.tokenId));
+        setNfts((prevNfts) =>
+          prevNfts.filter((nft) => nft.tokenId !== val.tokenId)
+        );
       } catch (error) {
         console.error(error);
       }
@@ -37,15 +44,15 @@ const UserDashboard = () => {
       <>
         {/* <tr key={val.tokenId}> */}
         <tr>
-        <td>{val.tokenId.slice(-3)} </td>
+          <td>{val.tokenId.slice(-3)} </td>
           {/* <th scope="row">{val.tokenId}</th> */}
           <td className="mint-image" width={1}>
             <img
-              src={val.fileUrl}
+              src={val.image}
               alt=""
               className="rounded fluid"
               height={40}
-              onClick={handleShowModal}
+              onClick={() => handleShowModal(val)}
             />
           </td>
           <td>{val.name}</td>
@@ -60,12 +67,13 @@ const UserDashboard = () => {
               Delete
             </button>
           </td>
-          
         </tr>
 
         <Modal show={showModal} onHide={handleCloseModal}>
           <Modal.Body>
-            <img src={val.image} alt="" className="img-fluid" />
+            {selectedNft && (
+              <img src={selectedNft.image} alt="" className="img-fluid" />
+            )}
           </Modal.Body>
         </Modal>
       </>
@@ -104,13 +112,12 @@ const UserDashboard = () => {
             <table className="table">
               <thead>
                 <tr className="table-light">
-                <th scope="col">ID</th>
+                  <th scope="col">ID</th>
                   <th scope="col">Image</th>
                   <th scope="col">Title</th>
                   <th scope="col">Price</th>
                   <th scope="col">Description</th>
                   <th scope="col">Action</th>
-                 
                 </tr>
               </thead>
               <tbody>{nfts.map(ncard)}</tbody>
