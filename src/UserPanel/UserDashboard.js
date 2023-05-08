@@ -91,8 +91,15 @@ const UserDashboard = () => {
       name: item.name,
       description: item.description,
     }));
-    setNfts(items);
-    setLoadingState("loaded");
+    // Get the current user's address
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const currentUserAddress = await signer.getAddress();
+
+  // Filter the NFTs to only show those owned by the current user
+  const myNfts = items.filter((nft) => nft.owner === currentUserAddress);
+  setNfts(myNfts);
+  setLoadingState("loaded");
   }
   let wAddressLocalget = JSON.parse(localStorage.getItem("wAddressLocal"));
   if (wAddressLocalget !== null) {
